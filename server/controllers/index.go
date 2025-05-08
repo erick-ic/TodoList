@@ -8,11 +8,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type TodosController struct {
-	// ID     int    `json:"id"`
-	// Title  string `json:"title"`
-	// Status bool   `json:"status"`
-}
+type TodosController struct{}
 
 // hello
 func (con TodosController) Hello(ctx *gin.Context) {
@@ -22,16 +18,17 @@ func (con TodosController) Hello(ctx *gin.Context) {
 // 增-创建待办
 func (con TodosController) CreateEvent(ctx *gin.Context) {
 	// // // 从请求中获取数据
-	// var result TodosController
-	// fmt.Println("------result:---1", result)
-	// ctx.BindJSON(&result)
-	// fmt.Println("------result:---2", result)
-	data := models.Todos{
-		Title:  "code",
-		Status: false,
-	}
-	fmt.Println("data", &data)
-	if err := models.DB.Create(&data).Error; err != nil {
+	var result models.Todos
+	ctx.BindJSON(&result)
+	fmt.Printf("------result:%#v-------", result)
+
+	// data := models.Todos{
+	// 	Title:  "code",
+	// 	Status: false,
+	// }
+	// fmt.Println("data", &data)
+
+	if err := models.DB.Create(&result).Error; err != nil {
 		ctx.JSON(http.StatusOK, gin.H{
 			"error": err.Error(),
 		})
@@ -39,7 +36,7 @@ func (con TodosController) CreateEvent(ctx *gin.Context) {
 		ctx.JSON(http.StatusOK, gin.H{
 			"code": 200,
 			"msg":  "success",
-			"data": data,
+			"data": result,
 		})
 	}
 }

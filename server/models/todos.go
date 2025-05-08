@@ -2,16 +2,20 @@ package models
 
 import (
 	"fmt"
+	"time"
 
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
 
 type Todos struct {
-	gorm.Model
-	Id     int    `json:"id"`
-	Title  string `json:"title"`
-	Status bool   `json:"status"`
+	// gorm.Model
+	ID         int        `json:"id"`
+	Title      string     `json:"title"`
+	Status     bool       `json:"status"`
+	Created_at *time.Time `json:"createAt"`
+	Updated_at *time.Time `json:"updatedAt"`
+	Deleted_at *time.Time `json:"deletedAt"`
 }
 
 var DB *gorm.DB

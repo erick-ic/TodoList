@@ -14,26 +14,12 @@
       <el-table-column align="center" label="待办事项" prop="title"></el-table-column>
       <el-table-column align="right" label="操作">
         <template slot-scope="scope">
-          <el-button
-            type="success"
-            icon="el-icon-check"
-            v-show="!scope.row.status"
-            @click="handleEdit(scope.$index, scope.row)"
-            circle
-          ></el-button>
-          <el-button
-            type="warning"
-            icon="el-icon-refresh-left"
-            v-show="scope.row.status"
-            @click="handleEdit(scope.$index, scope.row)"
-            circle
-          ></el-button>
-          <el-button
-            type="danger"
-            icon="el-icon-close"
-            @click="handleDelete(scope.$index, scope.row.id)"
-            circle
-          ></el-button>
+          <el-button type="success" icon="el-icon-check" v-show="!scope.row.status"
+            @click="handleEdit(scope.$index, scope.row)" circle></el-button>
+          <el-button type="warning" icon="el-icon-refresh-left" v-show="scope.row.status"
+            @click="handleEdit(scope.$index, scope.row)" circle></el-button>
+          <el-button type="danger" icon="el-icon-close" @click="handleDelete(scope.$index, scope.row.id)"
+            circle></el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -51,7 +37,7 @@ export default {
   },
   mounted() {
     this.axios
-      .get("/v1/todo")
+      .get("/getEvent")
       .then(response => (this.tableData = response.data));
   },
   methods: {
@@ -64,13 +50,13 @@ export default {
     },
     getTodoList() {
       this.axios
-        .get("/v1/todo")
+        .get("/getEvent")
         .then(response => (this.tableData = response.data));
     },
     handleEdit(index, row) {
       let messageSuffix = row.status ? " 置为未完成" : " 置为已完成";
       this.axios
-        .put("/v1/todo/" + row.id, {
+        .put("/editEvent/" + row.id, {
           status: !row.status
         })
         .then(() => {
@@ -84,7 +70,7 @@ export default {
         });
     },
     handleDelete(index, id) {
-      this.axios.delete("/v1/todo/" + id).then(() => {
+      this.axios.delete("/deleteEvent/" + id).then(() => {
         this.tableData.splice(index, 1);
         this.$message({
           showClose: true,
@@ -97,7 +83,7 @@ export default {
     handleAdd() {
       if (this.newTitle != "") {
         this.axios
-          .post("/v1/todo", {
+          .post("/createEvent", {
             title: this.newTitle
           })
           .then(() => {
